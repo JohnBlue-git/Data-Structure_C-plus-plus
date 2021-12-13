@@ -304,12 +304,15 @@ LinkedList<T> LinkedList<T>::sorting() const {
 			}
 			// condition 3: compare though loop
 			else {
+                                // New node
 				ListNode<T>* newNode = new ListNode<T>(current->data);
 				while (current->data > current_RT->next->data) {
 					current_RT = current_RT->next;
 				}
 				newNode->next = current_RT->next;
 				current_RT->next = newNode;
+                                // increase size
+                                RT.size++;
 			}
 		}
 		// iteration
