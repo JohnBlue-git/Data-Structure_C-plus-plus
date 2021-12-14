@@ -20,17 +20,24 @@ class LinkedList;
 
 template<class T>
 class ListNode {
+/* since set to private is hard to utilized directly by derived class
 private:
 	// content
 	T data;
 	ListNode* next;
-
+*/	
+private:// prevent cilent from using these 
 	// constructor
 	ListNode(const ListNode& copy) {}
 
 	// operator
 	ListNode& operator=(const ListNode& copy) { return *this; };
 
+protected:
+	// content
+	T data;
+	ListNode* next;
+	
 public:
 	// constructor
 	ListNode(): data(0), next(0) {};
