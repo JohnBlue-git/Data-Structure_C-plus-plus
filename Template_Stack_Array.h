@@ -70,7 +70,8 @@ Stack_Array<T, N>& Stack_Array<T, N>::operator=(const Stack_Array<T, N>& copy) {
 	// clear
 	this->Clear();
 	// copy content
-  for (int i = 0; i < size; i++) {
+	this->size = copy.size;
+  	for (int i = 0; i < size; i++) {
 		this->Push(copy.data);
 	}
 	// return
