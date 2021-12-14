@@ -29,9 +29,6 @@ public:
 
 	// operator
 	Stack_Array& operator=(const Stack_Array& copy);
-	T& operator[](const unsigned int x);
-	//T& operator[](const unsigned int x) const;// the same even with const
-	//T operator[](const unsigned int x) const;// not mutable
 	template<class U, int W> friend std::ostream& operator<<(std::ostream& os, const Stack_Array<U, W>& print);
 
 	// function
@@ -76,19 +73,6 @@ Stack_Array<T, N>& Stack_Array<T, N>::operator=(const Stack_Array<T, N>& copy) {
 	}
 	// return
 	return *this;
-}
-
-template<class T, int N>
-T& Stack_Array<T, N>::operator[](const unsigned int x) {
-	// check
-	if (size == 0) {                     // id list list is empty
-		throw bad_empty("[] operation");
-	}
-	if (size < x + 1) {                   // bad index
-		throw bad_index(x, "[] operation");
-	}
-	// extract out the i th item
-	return data[x];
 }
 
 template<class T, int N>
