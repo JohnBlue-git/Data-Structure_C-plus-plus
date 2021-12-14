@@ -1,25 +1,22 @@
 
 /*
 Auther: John Blue
-Time: 2021/10
+Time: 2021/12
 Platform: ATOM with MinGw and g++compiler
-Object: Testing template LinkedList
+Object: Testing template Queue with LinkedList
 */
 
 #include <iostream>// for basic i/o
 #include <exception>// for exception
-#include "Template_SingleLinkedList.h"
+#include "Template_Queue_SingleLinkedList.h"
 using namespace std;
 
 int main() {
-  LinkedList<int> test;
+  Queue_LinkedList<int> test;
   cout << "Push" << endl;
   for(int i = 0; i < 6; i++) {
-    test.Push_front(i);
-    test.Push_back(i);
+    test.Enqueue(i);
   }
-  test.Push_back(6);
-  //test[3] = 33;// mutate
   cout << "is empty? 1 true 0 false: " << test.isEmpty() << endl;
   cout << "Print" << endl;
   test.PrintList();
@@ -29,33 +26,37 @@ int main() {
   cout << endl;
 
   cout << "Copy" << endl;
-  LinkedList<int> copy(test);
+  Queue_LinkedList<int> copy(test);
   cout << "Print" << endl;
   copy.PrintList();
   cout << endl;
 
   cout << "Assign" << endl;
-  LinkedList<int> assign = test;
+  Queue_LinkedList<int> assign = test;
   cout << "Print" << endl;
   assign.PrintList();
   cout << endl;
 
   cout << "Transeverse" << endl;
-  LinkedList<int> transe = test.transverse();
+  Queue_LinkedList<int> transe(test.transverse());
   cout << "Print" << endl;
   transe.PrintList();
   cout << endl;
 
   cout << "Sorting" << endl;
-  LinkedList<int> sort = test.sorting();
+  Queue_LinkedList<int> sort(test.sorting());
   cout << "Print" << endl;
   sort.PrintList();
   cout << "Size" << endl;
   cout << test.length() << endl;
   cout << endl;
 
-  cout << "Clear" << endl;
-  test.Clear();
+  //cout << "Clear" << endl;
+  //test.Clear();
+  cout << "Pop" << endl;
+  for(int i = 0; i < 6; i++) {
+    cout << test.Dequeue() << endl;
+  }
   cout << "is empty? 1 true 0 false: " << test.isEmpty() << endl;
   cout << "Print" << endl;
   try {

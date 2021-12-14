@@ -20,29 +20,26 @@ class LinkedList;
 
 template<class T>
 class ListNode {
-/* since set to private is hard to utilized directly by derived class
-private:
-	// content
-	T data;
-	ListNode* next;
-*/	
-private:// prevent cilent from using these 
-	// constructor
-	ListNode(const ListNode& copy) {}
+private:// content
+    T data;
+    ListNode* next;
 
-	// operator
-	ListNode& operator=(const ListNode& copy) { return *this; };
+private:// prevent cilent from using these
+    // constructor
+    ListNode(const ListNode& copy) {}
 
-protected:
-	// content
-	T data;
-	ListNode* next;
-	
+    // operator
+    ListNode& operator=(const ListNode& copy) { return *this; };
+
 public:
 	// constructor
 	ListNode(): data(0), next(0) {};
 	ListNode(T a): data(a), next(0) {};
 	~ListNode() {}
+
+	// function
+	T get_data() const { return data; };
+	ListNode* get_next() const { return next; };
 
 	// friend class
 	friend class LinkedList<T>;
@@ -76,7 +73,7 @@ public:
 
 	// function
 	bool isEmpty() const;// check empty
-	int length() const;
+	int length() const;// size of list
 	void PrintList() const;// print list
 	void Clear();// clear list
 	void Push_back(T x);// add entity
@@ -299,7 +296,6 @@ LinkedList<T> LinkedList<T>::sorting() const {
 		}
 		// second ... rounds
 		else {
-			std::cout << current->data << " " << std::endl;
 			// compare value
 			// condition 1: bigger than the whole RT list
 			if (current->data >= RT.end->data) {
@@ -311,15 +307,15 @@ LinkedList<T> LinkedList<T>::sorting() const {
 			}
 			// condition 3: compare though loop
 			else {
-                                // New node
+				// new node
 				ListNode<T>* newNode = new ListNode<T>(current->data);
 				while (current->data > current_RT->next->data) {
 					current_RT = current_RT->next;
 				}
 				newNode->next = current_RT->next;
 				current_RT->next = newNode;
-                                // increase size
-                                RT.size++;
+				// increase size
+				RT.size++;
 			}
 		}
 		// iteration
