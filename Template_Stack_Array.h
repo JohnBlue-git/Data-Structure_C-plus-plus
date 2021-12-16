@@ -47,6 +47,12 @@ public:
 		explicit bad_empty(const std::string & s = " "): std::logic_error(s + ", Empty error in List object\n") {};
 		virtual ~bad_empty() throw() {}
 	};
+        class bad_full : public std::logic_error
+	{
+	public:
+		explicit bad_full(const std::string & s = " "): std::logic_error(s + ", Full error in List object\n") {};
+		virtual ~bad_full() throw() {}
+	};
 	class bad_index : public std::logic_error
 	{
 	private:
@@ -142,7 +148,7 @@ template<class T, int N>
 void Stack_Array<T, N>::Push(T x) {
   // check
   if (size == N) {                   // bad index(full)
-		throw bad_index(x, "Overflow Push");
+		throw bad_full("Push");
 	}
   // add
   data[size++] = x;
