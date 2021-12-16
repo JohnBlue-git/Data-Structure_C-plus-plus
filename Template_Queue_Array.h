@@ -48,6 +48,12 @@ public:
 		explicit bad_empty(const std::string & s = " "): std::logic_error(s + ", Empty error in List object\n") {};
 		virtual ~bad_empty() throw() {}
 	};
+        class bad_full : public std::logic_error
+	{
+	public:
+		explicit bad_full(const std::string & s = " "): std::logic_error(s + ", Full error in List object\n") {};
+		virtual ~bad_full() throw() {}
+	};
 	class bad_index : public std::logic_error
 	{
 	private:
@@ -112,11 +118,6 @@ void Queue_Array<T, N>::PrintList() const {
 
 template<class T, int N>
 std::ostream& operator<<(std::ostream& os, const Queue_Array<T, N>& print) {
-	// check
-	if (print.size == 0) {                         // if list is empty
-		// not yet know what to implment exception for operator
-		//return os << print.bad_empty("operator<<");
-	}
 	// print out
 	os << "List: ";
   for (int i = print.it_h; i < print.it_e; i++) {                    // execute to last NULL
