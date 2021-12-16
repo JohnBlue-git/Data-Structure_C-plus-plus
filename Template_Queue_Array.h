@@ -146,7 +146,7 @@ template<class T, int N>
 void Queue_Array<T, N>::Enqueue(T x) {
   // check
   if (size == N) {                   // bad index(full)
-		throw bad_index(x, "Overflow Push");
+		throw bad_full("Push");
 	}
   // add
   data[it_e++] = x;
