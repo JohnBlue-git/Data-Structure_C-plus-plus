@@ -194,6 +194,13 @@ void LinkedList<T>::PrintList() const {
 
 template<class T>
 std::ostream& operator<<(std::ostream& os, const LinkedList<T>& print) {
+	// check
+	if (print.first == 0) {                         // if list is empty
+		// not yet know what to implment exception for operator
+		//return os << print.bad_empty("operator<<");
+    os << "operator<<, Empty error in List object\n";
+    return os;
+	}
 	// print out
 	ListNode<T>* current = print.first;             // point to first
 	os << "List: ";
