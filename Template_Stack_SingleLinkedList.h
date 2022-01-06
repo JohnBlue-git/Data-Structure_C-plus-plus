@@ -24,8 +24,27 @@ public:
 	Stack_LinkedList& operator=(const Stack_LinkedList& copy);
 
 	// function
-	void Push(T x) { this->Push_front(x); };// push entity
-	T Pop();// pop entity
+	void Push(T x) { this->Push_front(x); };// push entity; push to front
+	T Pop();// pop entity                                 ; pop from front
+
+	// exception class
+	class n_bad_empty : public LinkedList<T>::bad_empty
+	{
+	public:
+		explicit n_bad_empty(const std::string & s = " "): LinkedList<T>::bad_empty(s + ", Empty error in Stack object\n") {};
+		virtual ~n_bad_empty() throw() {}
+	};
+	/*
+	class n_bad_index : public LinkedList<T>::bad_index
+	{
+	private:
+		int index;
+	public:
+		explicit n_bad_index(int ix = 0, const std::string & s = " "): LinkedList<T>::bad_index(ix , s + ", Index error in Stack object\n") {};
+		int get_index() const { return index; }
+		virtual ~n_bad_index() throw() {}
+	};
+	*/
 };
 
 template<class T>
@@ -38,9 +57,9 @@ Stack_LinkedList<T>& Stack_LinkedList<T>::operator=(const Stack_LinkedList<T>& c
 template<class T>
 T Stack_LinkedList<T>::Pop() {
 	// check
-	//if (first == 0) {                         // if list is empty
-		//throw ???bad_empty("Pop()");
-	//}
+	if (this->first == 0) {                         // if list is empty
+		throw n_bad_empty("Pop()");
+	}
 	// pop
 	T rt;
 	ListNode<T>* current = this->first;

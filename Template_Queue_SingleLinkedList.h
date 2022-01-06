@@ -24,8 +24,27 @@ public:
 	Queue_LinkedList& operator=(const Queue_LinkedList& copy);
 
 	// function
-	void Enqueue(T x) { this->Push_back(x); };// enqueue entity
-	T Dequeue();// dequeue entity
+	void Enqueue(T x) { this->Push_back(x); };// enqueue entity; en to back
+	T Dequeue();// dequeue entity                              ; de from front
+
+	// exception class
+	class n_bad_empty : public LinkedList<T>::bad_empty
+	{
+	public:
+		explicit n_bad_empty(const std::string & s = " "): LinkedList<T>::bad_empty(s + ", Empty error in Queue object\n") {};
+		virtual ~n_bad_empty() throw() {}
+	};
+	/*
+	class n_bad_index : public LinkedList<T>::bad_index
+	{
+	private:
+		int index;
+	public:
+		explicit n_bad_index(int ix = 0, const std::string & s = " "): LinkedList<T>::bad_index(ix , s + ", Index error in Queue object\n") {};
+		int get_index() const { return index; }
+		virtual ~n_bad_index() throw() {}
+	};
+	*/
 };
 
 template<class T>
@@ -38,9 +57,9 @@ Queue_LinkedList<T>& Queue_LinkedList<T>::operator=(const Queue_LinkedList<T>& c
 template<class T>
 T Queue_LinkedList<T>::Dequeue() {
 	// check
-	//if (first == 0) {                         // if list is empty
-		//throw ???bad_empty("Pop()");
-	//}
+	if (this->first == 0) {                         // if list is empty
+		throw n_bad_empty("Pop()");
+	}
 	// pop
 	T rt;
 	ListNode<T>* current = this->first;
