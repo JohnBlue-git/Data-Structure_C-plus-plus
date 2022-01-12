@@ -1,4 +1,4 @@
-# Data-Structure_Cplusplus_Java
+# Data-Structure_Cplusplus
 
 These are notes and implementation of Data Structure.
 
