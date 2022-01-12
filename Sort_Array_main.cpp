@@ -3,7 +3,7 @@
 Auther: John Blue
 Time: 2022/1
 Platform: ATOM with MinGw and g++compiler
-Object: Testing Template Elementary Sort
+Object: Testing Template Elementary Sort: Selection sort, Insertion sort, Merge sort
 */
 
 #include <iostream>// for basic i/o

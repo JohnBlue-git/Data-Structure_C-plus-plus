@@ -3,7 +3,7 @@
 Auther: John Blue
 Time: 2022/1
 Platform: ATOM with MinGw and g++compiler
-Object: Template Elementary Sort
+Object: Template Elementary Sort: Selection sort, Insertion sort, Merge sort
 Disclaimer: The std::string haven't been consider throughly in this scope
 */
 
