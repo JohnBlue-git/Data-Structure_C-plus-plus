@@ -88,7 +88,7 @@ bool Stack_Array<T, N>::isEmpty() const {
 
 template<class T, int N>
 bool Stack_Array<T, N>::isFull() const {
-  return size > N;
+  return size >= N;
 }
 
 template<class T, int N>
