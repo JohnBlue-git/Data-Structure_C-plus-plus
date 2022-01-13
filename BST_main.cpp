@@ -58,7 +58,7 @@ public:
   int MaxK();
   //int floor(int ky);
   //int ceil(int ky);
-  //void delete(); yet understand ppt 3.2 p29
+  //void delete();
 };
 
 BST::BST(const BST& copy): key(copy.key), data(copy.data), left(0), right(0) {
@@ -79,17 +79,15 @@ BST::~BST() {
   // left
   if (left != 0) {
     (*left).BST::~BST();
+    left = 0;
+    //std::cout << "left\n";
   }
-  //else if (left == 0) {
-    //delete left;
-  //}
   // right
   if (right != 0) {
     (*right).BST::~BST();
+    right = 0;
+    //std::cout << "right\n";
   }
-  //else if (right == 0) {
-    //delete right;
-  //}
 }
 
 void BST::print() {
@@ -170,8 +168,34 @@ int BST::MaxK() {
 // no kid
 // one kid
 // two kids
-// ... yet understand
-//int BST::delete(int ky) {}
+/*
+void BST::delete(int ky) {
+  BST* p_current = 0;
+  BST* current = this;
+  while (current != 0) {
+    p_current = current;
+    if (ky < current->key) {
+      current = current->left;
+    }
+    else if (ky > current->key) {
+      current = current->right;
+    }
+    else if (ky == current->key) {
+      if (current->left == 0 && current->right == 0) {
+        delete current;
+        p_current = 0;
+        return;
+      }
+      else if (current->left == 0 || current->right == 0) {
+        delete current;
+        return;
+      }
+    }
+  }
+  // not found
+  ...
+}
+*/
 
 int main()
 {
