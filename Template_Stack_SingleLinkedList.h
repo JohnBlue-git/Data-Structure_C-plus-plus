@@ -50,7 +50,7 @@ public:
 template<class T>
 Stack_LinkedList<T>& Stack_LinkedList<T>::operator=(const Stack_LinkedList<T>& copy) {
 	LinkedList<T>* pt = this;
-	pt->operator=();
+	pt->operator=(copy);
 	return *this;
 }
 

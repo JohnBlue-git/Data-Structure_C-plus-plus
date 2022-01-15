@@ -50,7 +50,7 @@ public:
 template<class T>
 Queue_LinkedList<T>& Queue_LinkedList<T>::operator=(const Queue_LinkedList<T>& copy) {
 	LinkedList<T>* pt = this;
-	pt->operator=();
+	pt->operator=(copy);
 	return *this;
 }
 
