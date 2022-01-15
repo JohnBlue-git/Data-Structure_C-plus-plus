@@ -283,4 +283,9 @@ int main()
   bt.Del(12);
   bt.print();
   std::cout << "\n";
+  // copy
+  std::cout << "Copy:\n";
+  BST cp(bt);
+  cp.print();
+  std::cout << "\n";
 }
