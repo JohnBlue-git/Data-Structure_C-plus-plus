@@ -4,9 +4,8 @@ Auther: John Blue
 Time: 2022/1
 Platform: ATOM with MinGw and g++compiler
 Object: Binary Search Tree
-Version 2: update Del(...)
-Version 2(*): BST as Node
-Version 3: BST as controller to Node
+Version 2: BST as Node
+Version 3(*): BST as controller to Node
 */
 
 #include <iostream> // i/o
@@ -29,106 +28,174 @@ Version 3: BST as controller to Node
 //     binary search: sorted array
 //                    half by half
 //                    smaller? |find| larger? | ...
-class BST {
+
+class BST;
+
+class B_Node {
 private:
   // content
   int key;
   int data;
-  BST* left;
-  BST* right;
+  B_Node* left;
+  B_Node* right;
   // operator
-  BST& operator=(const BST& copy);
-
-protected:
-  // function
-  int get_key() const { return key; }
-	int get_data() const { return data; }
-	BST* get_left() const { return left; }
-  BST* get_right() const { return right; }
+  B_Node& operator=(const B_Node& copy);
 
 public:
   // constructor
-  BST(): key(- 1), data(0), left(0), right(0) {}
-  BST(int k, int d): key(k), data(d), left(0), right(0) {}
+  //B_Node(): key(- 1), data(0), left(0), right(0) {}
+  B_Node(int k, int d): key(k), data(d), left(0), right(0) {}
+  B_Node(const B_Node& copy);
+  ~B_Node();
+  // function
+  int get_key() const { return key; }
+	int get_data() const { return data; }
+	B_Node* get_left() const { return left; }
+  B_Node* get_right() const { return right; }
+  // friend
+  friend BST;
+};
+
+class BST {
+private:
+  // root
+  B_Node* root;
+  // operator
+  BST& operator=(const BST& copy);
+
+public:
+  // constructor
+  BST(): root(0) {}
   BST(const BST& copy);
   ~BST();
 
   // function
-  void print();
+  // print method 1:
+  //void print() with current = 0;
+  void print(B_Node* current);
+  // print method 2:
+  // advantage >> hiding looping var from client
+  void print_loop(B_Node* current);
+  void print_v2();
+  // function
   void put(int ky, int dt);
   int get(int ky);
   int MinK();
   int MaxK();
   //int floor(int ky);
   //int ceil(int ky);
-  //void Del(ky) with p_current = 0
-  void Del(int ky, BST** p_current);
-};
+  //void Del(ky) with p_current = 0, current = 0
+  void Del(int ky, B_Node** p_current, B_Node* current);};
 
-BST::BST(const BST& copy): key(copy.key), data(copy.data), left(0), right(0) {
-  // left
+B_Node::B_Node(const B_Node& copy) {
+  // copy data
+  key = copy.key;
+  data = copy.data;
+  // copy pt
   if (copy.left != 0) {
-    left = new BST(*copy.left);
+    left = new B_Node(*copy.left);
   }
-  // right
   if (copy.right != 0) {
-    right = new BST(*copy.right);
+    right = new B_Node(*copy.right);
   }
+}
+
+B_Node::~B_Node() {
+  // delete data
+  key = 0;
+  data = 0;
+  // delete pt
+  if (left != 0) {
+    delete left;
+  }
+  if (right != 0) {
+    delete right;
+  }
+}
+
+BST::BST(const BST& copy): root(0) {
+  // check
+  if (copy.root == 0) {
+    return;
+  }
+  // copy
+  root = new B_Node(*copy.root);
 }
 
 BST::~BST() {
-  // data
-  key = 0;
-  data = 0;
+  delete root;
+
+  // another way?
+  //https://stackoverflow.com/questions/34170164/destructor-for-binary-search-tree
+  // use while ? @@; had better not
+  /*
+  while (root != 0) {
+    while (current->left != 0) {
+      while (current->right != 0) {
+        break;
+      }
+    }
+  }
+  */
+}
+
+void BST::print(B_Node* current = 0) {
+  // check
+  if (root == 0) {
+    std::cout << "empty\n";
+    return;
+  }
+  // first round?
+  if (current == 0) {
+    current = root;
+  }
+  // middle
+  std::cout << "key" << current->key << ": " << current->data << "\n";
   // left
-  if (left != 0) {
-    left->~BST();
-    left = 0;
-    // delete null will not doing anything, but it will prevent to delete next ...
-    //delete left;
-    //std::cout << "left\n";
+  if (current->left != 0) {
+    print(current->left);
   }
   // right
-  if (right != 0) {
-    right->~BST();
-    right = 0;
-    // delete null will not doing anything, but it will prevent to delete next ...
-    //delete right;
-    //std::cout << "right\n";
+  if (current->right != 0) {
+    print(current->right);
   }
 }
 
-void BST::print() {
-  // checks
-  if (key == 0) {
-    std::cout << "hi\n";
-    return;
-  }
+void BST::print_loop(B_Node* current) {
   // middle
-  std::cout << "key" << key << ": " << data << "\n";
+  std::cout << "key" << current->key << ": " << current->data << "\n";
   // left
-  if (left != 0) {
-    left->print();
+  if (current->left != 0) {
+    print(current->left);
   }
   // right
-  if (right != 0) {
-    right->print();
+  if (current->right != 0) {
+    print(current->right);
   }
+}
+
+void BST::print_v2() {
+  // check
+  if (root == 0) {
+    std::cout << "empty\n";
+    return;
+  }
+  // print
+  print_loop(root);
 }
 
 void BST::put(int ky, int dt) {
-  BST* current = this;
   // first?
-  if (current->key == - 1) {
-    current->key = ky;
-    current->data = dt;
+  if (root == 0) {
+    root = new B_Node(ky, dt);
     return;
   }
   // insert
+  B_Node* current = root;
   while(1) {
     if (ky < current->key) {
       if (current->left == 0) {
-        current->left = new BST(ky, dt);
+        current->left = new B_Node(ky, dt);
         break;
       }
       else {
@@ -137,7 +204,7 @@ void BST::put(int ky, int dt) {
     }
     else if (ky > current->key) {
       if (current->right == 0) {
-        current->right = new BST(ky, dt);
+        current->right = new B_Node(ky, dt);
         break;
       }
       else {
@@ -145,14 +212,14 @@ void BST::put(int ky, int dt) {
       }
     }
     else if (ky == current->key) {
-      data = dt;
+      current->data = dt;
       break;
     }
   }
 }
 
 int BST::get(int ky) {
-  BST* current = this;
+  B_Node* current = root;
   while (current != 0) {
     if (ky < current->key) {
       current = current->left;
@@ -168,7 +235,7 @@ int BST::get(int ky) {
 }
 
 int BST::MinK() {
-  BST* current = this;
+  B_Node* current = root;
   while(current->left != 0) {
     current = current->left;
   }
@@ -176,7 +243,7 @@ int BST::MinK() {
 }
 
 int BST::MaxK() {
-  BST* current = this;
+  B_Node* current = root;
   while(current->right != 0) {
     current = current->right;
   }
@@ -187,9 +254,19 @@ int BST::MaxK() {
 // no kid
 // one kid
 // two kids
-void BST::Del(int ky, BST** p_current = 0) {
-  //BST** p_current; address of parent left or right pointer
-  BST* current = this;
+void BST::Del(int ky, B_Node** p_current = 0, B_Node* current = 0) {
+  //B_Node** p_current; address of parent left or right pointer
+  //
+  // check
+  if (root == 0) {
+    std::cout << "empty\n";
+    return;
+  }
+  // first round?
+  if (current == 0) {
+    current = root;
+  }
+  // deleting
   while (current != 0) {
     // search
     if (ky < current->key) {
@@ -204,7 +281,7 @@ void BST::Del(int ky, BST** p_current = 0) {
     else if (ky == current->key) {
       if (current->left == 0 && current->right == 0) {
         *p_current = 0;// !!! very important; cut the link; prevent further delete
-        current->~BST();//delete current; not work @@
+        delete current;
         return;
       }
       else if (current->left != 0 && current->right == 0) {
@@ -225,14 +302,14 @@ void BST::Del(int ky, BST** p_current = 0) {
           current->key = current->right->left->key;
           current->data = current->right->left->data;
           // delete (key, address of parent left or right)
-          current->right->left->Del(current->right->left->key, &(current->right->left));
+          Del(current->right->left->key, &(current->right->left), current->right->left);
         }
         else if (current->right != 0) {
           // move
           current->key = current->right->key;
           current->data = current->right->data;
           // delete (key, address of parent left or right)
-          current->right->Del(current->right->key, &(current->right));
+          Del(current->right->key, &(current->right), current->right);
         }
         return;
       }
@@ -259,8 +336,11 @@ int main()
     bt.put(dt[i], i * 10);
   }
   // print
-  std::cout << "BST:\n";
+  std::cout << "  BST:\n";
+  std::cout << "with print():\n";
   bt.print();
+  std::cout << "with print_v2():\n";
+  bt.print_v2();
   std::cout << "\n";
   // get
   std::cout << "get key(8):" << bt.get(8) << "\n";
