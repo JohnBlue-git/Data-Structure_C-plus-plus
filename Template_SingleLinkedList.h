@@ -31,11 +31,6 @@ private:// prevent cilent from using these
     // operator
     ListNode& operator=(const ListNode& copy) { return *this; }
 
-protected:
-    // function
-  	T get_data() const { return data; }
-  	ListNode* get_next() const { return next; }
-
 public:
 	// constructor
 	ListNode(): data(0), next(0) {}
@@ -44,6 +39,11 @@ public:
     data = 0;
     next = 0;
   }
+
+  // !!! must be public for derived LinkedList
+  // function
+  T get_data() const { return data; }
+  ListNode* get_next() const { return next; }
 
 	// friend class
 	friend class LinkedList<T>;
