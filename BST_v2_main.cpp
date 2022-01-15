@@ -48,7 +48,7 @@ protected:
 
 public:
   // constructor
-  //BST(): key(0), data(0), left(0), right(0) {}
+  BST(): key(- 1), data(0), left(0), right(0) {}
   BST(int k, int d): key(k), data(d), left(0), right(0) {}
   BST(const BST& copy);
   ~BST();
@@ -117,26 +117,36 @@ void BST::print() {
 
 void BST::put(int ky, int dt) {
   BST* current = this;
-  if (ky < key) {
-    if (current->left == 0) {
-      current->left = new BST(ky, dt);
-    }
-    else {
-      current = current->left;
-      current->put(ky, dt);
-    }
+  // first?
+  if (current->key == - 1) {
+    current->key = ky;
+    current->data = dt;
+    return;
   }
-  else if (ky > key) {
-    if (current->right == 0) {
-      current->right = new BST(ky, dt);
+  // insert
+  while(1) {
+    if (ky < current->key) {
+      if (current->left == 0) {
+        current->left = new BST(ky, dt);
+        break;
+      }
+      else {
+        current = current->left;
+      }
     }
-    else {
-      current = current->right;
-      current->put(ky, dt);
+    else if (ky > current->key) {
+      if (current->right == 0) {
+        current->right = new BST(ky, dt);
+        break;
+      }
+      else {
+        current = current->right;
+      }
     }
-  }
-  else if (ky == key) {
-    data = dt;
+    else if (ky == current->key) {
+      data = dt;
+      break;
+    }
   }
 }
 
@@ -242,9 +252,9 @@ int main()
   // order of key when print: 8, 4, 2, 1, 3, 6, 5, 7, 12, 10, 9, 11, 14, 13, 15
   //
   int dt[15] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
-  BST bt(dt[0], 0);
+  BST bt;
   // put
-  for (int i = 1; i < 15; i++) {
+  for (int i = 0; i < 15; i++) {
     bt.put(dt[i], i * 10);
   }
   // print
