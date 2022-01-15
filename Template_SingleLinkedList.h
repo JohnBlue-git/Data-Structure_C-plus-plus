@@ -228,6 +228,7 @@ void LinkedList<T>::Clear() {
 		current = first;
 		first = first->next;
 		// !!! delete and prevent bug
+    current->next = 0;
 		delete current;
 		current = 0;
 	}
