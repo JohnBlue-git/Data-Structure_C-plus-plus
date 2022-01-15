@@ -4,6 +4,7 @@ Auther: John Blue
 Time: 2022/1
 Platform: ATOM with MinGw and g++compiler
 Object: Binary Search Tree
+Version origin: ... h
 */
 
 #include <iostream> // i/o
