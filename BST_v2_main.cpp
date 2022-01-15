@@ -81,7 +81,7 @@ BST::~BST() {
   data = 0;
   // left
   if (left != 0) {
-    (*left).BST::~BST();
+    left->~BST();
     left = 0;
     // delete null will not doing anything, but it will prevent to delete next ...
     //delete left;
@@ -89,7 +89,7 @@ BST::~BST() {
   }
   // right
   if (right != 0) {
-    (*right).BST::~BST();
+    right->~BST();
     right = 0;
     // delete null will not doing anything, but it will prevent to delete next ...
     //delete right;
