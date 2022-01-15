@@ -29,17 +29,21 @@ private:// prevent cilent from using these
     ListNode(const ListNode& copy) {}
 
     // operator
-    ListNode& operator=(const ListNode& copy) { return *this; };
+    ListNode& operator=(const ListNode& copy) { return *this; }
+
+protected:
+    // function
+  	T get_data() const { return data; }
+  	ListNode* get_next() const { return next; }
 
 public:
 	// constructor
-	ListNode(): data(0), next(0) {};
-	ListNode(T a): data(a), next(0) {};
-	~ListNode() {}
-
-	// function
-	T get_data() const { return data; };
-	ListNode* get_next() const { return next; };
+	ListNode(): data(0), next(0) {}
+	ListNode(T a): data(a), next(0) {}
+	~ListNode() {
+    data = 0;
+    next = 0;
+  }
 
 	// friend class
 	friend class LinkedList<T>;
