@@ -14,6 +14,8 @@ Disclaimer: The std::string LinkedList haven't been consider throughly in this s
 #include <typeinfo>// for typeid
 //#include <fstream>// for file
 
+////// ListNode.h
+
 // set LinkedList as friend of ListNode
 template<class T>
 class LinkedList;
@@ -63,6 +65,8 @@ public:
 	friend class LinkedList<T>;
 	template<class U> friend std::ostream& operator<<(std::ostream& os, const LinkedList<U>& print);
 };
+
+////// LinkedList.h
 
 template<class T>
 class LinkedList {
@@ -116,6 +120,8 @@ public:
 		virtual ~bad_index() throw() {}
 	};
 };
+
+////// LinkedList.cpp
 
 template<class T>
 LinkedList<T>::LinkedList(const LinkedList<T>& copy): first(0), end(0) {
