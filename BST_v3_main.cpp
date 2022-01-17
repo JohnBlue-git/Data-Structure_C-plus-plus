@@ -49,8 +49,8 @@ public:
   ~B_Node();
   // function
   int get_key() const { return key; }
-	int get_data() const { return data; }
-	B_Node* get_left() const { return left; }
+  int get_data() const { return data; }
+  B_Node* get_left() const { return left; }
   B_Node* get_right() const { return right; }
   // friend
   friend BST;
@@ -62,6 +62,8 @@ private:
   B_Node* root;
   // operator
   BST& operator=(const BST& copy);
+  // function
+  void print_loop(B_Node* current);// for print_v2
 
 public:
   // constructor
@@ -75,7 +77,6 @@ public:
   void print(B_Node* current);
   // print method 2:
   // advantage >> hiding looping var from client
-  void print_loop(B_Node* current);
   void print_v2();
   // function
   void put(int ky, int dt);
