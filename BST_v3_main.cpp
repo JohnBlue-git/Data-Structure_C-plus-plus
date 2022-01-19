@@ -64,6 +64,7 @@ private:
   BST& operator=(const BST& copy);
   // function
   void print_loop(B_Node* current);// for print_v2
+  void Del_loop(int ky, B_Node** p_current, B_Node* current);
 
 public:
   // constructor
@@ -86,12 +87,16 @@ public:
   //int floor(int ky);
   //int ceil(int ky);
   //void Del(ky) with p_current = 0, current = 0
-  void Del(int ky, B_Node** p_current, B_Node* current);};
+  void Del_v1(int ky, B_Node** p_current, B_Node* current);
+  void Del_v2(int ky);
+};
 
 B_Node::B_Node(const B_Node& copy) {
   // copy data
   key = copy.key;
   data = copy.data;
+  left = 0;
+  right = 0;
   // copy pt
   if (copy.left != 0) {
     left = new B_Node(*copy.left);
@@ -255,7 +260,7 @@ int BST::MaxK() {
 // no kid
 // one kid
 // two kids
-void BST::Del(int ky, B_Node** p_current = 0, B_Node* current = 0) {
+void BST::Del_v1(int ky, B_Node** p_current = 0, B_Node* current = 0) {
   //B_Node** p_current; address of parent left or right pointer
   //
   // check
@@ -303,14 +308,14 @@ void BST::Del(int ky, B_Node** p_current = 0, B_Node* current = 0) {
           current->key = current->right->left->key;
           current->data = current->right->left->data;
           // delete (key, address of parent left or right)
-          Del(current->right->left->key, &(current->right->left), current->right->left);
+          Del_v1(current->right->left->key, &(current->right->left), current->right->left);
         }
         else if (current->right != 0) {
           // move
           current->key = current->right->key;
           current->data = current->right->data;
           // delete (key, address of parent left or right)
-          Del(current->right->key, &(current->right), current->right);
+          Del_v1(current->right->key, &(current->right), current->right);
         }
         return;
       }
@@ -319,6 +324,77 @@ void BST::Del(int ky, B_Node** p_current = 0, B_Node* current = 0) {
   // not found
   std::cout << "no such key\n";
 }
+
+// case:
+// no kid
+// one kid
+// two kids
+void BST::Del_loop(int ky, B_Node** p_current, B_Node* current) {
+  //B_Node** p_current; address of parent left or right pointer
+  //
+  // deleting
+  while (current != 0) {
+    // search
+    if (ky < current->key) {
+      p_current = &(current->left);
+      current = current->left;
+    }
+    else if (ky > current->key) {
+      p_current = &(current->right);
+      current = current->right;
+    }
+    // delete
+    else if (ky == current->key) {
+      if (current->left == 0 && current->right == 0) {
+        *p_current = 0;// !!! very important; cut the link; prevent further delete
+        delete current;
+        return;
+      }
+      else if (current->left != 0 && current->right == 0) {
+        *p_current = current->left;
+        current->left = 0;
+        delete current;
+        return;
+      }
+      else if (current->left == 0 && current->right != 0) {
+        *p_current = current->right;
+        current->right = 0;
+        delete current;
+        return;
+      }
+      else {
+        if (current->right->left != 0) {
+          // move
+          current->key = current->right->left->key;
+          current->data = current->right->left->data;
+          // delete (key, address of parent left or right)
+          Del_loop(current->right->left->key, &(current->right->left), current->right->left);
+        }
+        else if (current->right != 0) {
+          // move
+          current->key = current->right->key;
+          current->data = current->right->data;
+          // delete (key, address of parent left or right)
+          Del_loop(current->right->key, &(current->right), current->right);
+        }
+        return;
+      }
+    }
+  }
+  // not found
+  std::cout << "no such key\n";
+}
+
+void BST::Del_v2(int ky) {
+  // check
+  if (root == 0) {
+    std::cout << "empty\n";
+    return;
+  }
+  // from root
+  Del_loop(ky, 0, root);
+}
+
 
 int main()
 {
@@ -358,11 +434,11 @@ int main()
   // order of key when print: 8, 4, 2, 1, 3, 6, 5, 7, 13, 10, 9, 11
   //
   std::cout << "Del(15):\n";
-  bt.Del(15);
+  bt.Del_v2(15);
   std::cout << "Del(14):\n";
-  bt.Del(14);
+  bt.Del_v2(14);
   std::cout << "Del(12):\n";
-  bt.Del(12);
+  bt.Del_v2(12);
   bt.print();
   std::cout << "\n";
   // copy
