@@ -172,11 +172,11 @@ void BST::print_loop(B_Node* current) {
   std::cout << "key" << current->key << ": " << current->data << "\n";
   // left
   if (current->left != 0) {
-    print(current->left);
+    print_loop(current->left);
   }
   // right
   if (current->right != 0) {
-    print(current->right);
+    print_loop(current->right);
   }
 }
 
