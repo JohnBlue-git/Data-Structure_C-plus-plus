@@ -346,21 +346,27 @@ void BST::Del_loop(int ky, B_Node** p_current, B_Node* current) {
     // delete
     else if (ky == current->key) {
       if (current->left == 0 && current->right == 0) {
-        *p_current = 0;// !!! very important; cut the link; prevent further delete
+        // relink
+        *p_current = 0;// !!! very important; cut the link
+        // delete
         delete current;
-        return;
+        //return;
       }
       else if (current->left != 0 && current->right == 0) {
+        // relink
         *p_current = current->left;
-        current->left = 0;
+        // delete
+        current->left = 0;// !!! prevent further delete
         delete current;
-        return;
+        //return;
       }
       else if (current->left == 0 && current->right != 0) {
+        // relink
         *p_current = current->right;
-        current->right = 0;
+        // delete
+        current->right = 0;// !!! prevent further delete
         delete current;
-        return;
+        //return;
       }
       else {
         if (current->right->left != 0) {
@@ -377,8 +383,9 @@ void BST::Del_loop(int ky, B_Node** p_current, B_Node* current) {
           // delete (key, address of parent left or right)
           Del_loop(current->right->key, &(current->right), current->right);
         }
-        return;
+        //return;
       }
+      return;
     }
   }
   // not found
