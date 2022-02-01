@@ -565,7 +565,6 @@ void BST::Del_loop(int ky, B_Node** ad_p_p_current, B_Node** ad_p_current, B_Nod
           // move
           current->key = current->right->left->key;
           current->data = current->right->left->data;
-          current->color = current->right->left->color;
           // delete (key, address of parent left or right)
           Del_loop(current->right->left->key, &(current->right), &(current->right->left), current->right, current->right->left);
         }
@@ -575,7 +574,6 @@ void BST::Del_loop(int ky, B_Node** ad_p_p_current, B_Node** ad_p_current, B_Nod
           // move
           current->key = current->right->key;
           current->data = current->right->data;
-          current->color = current->right->color;
           // delete (key, address of parent left or right)
           Del_loop(current->right->key, ad_p_current, &(current->right), current, current->right);
         }
