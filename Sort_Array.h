@@ -178,22 +178,9 @@ void Sort<T>::Merge_Sort_tradition() {
 //
 template<class T>
 void Sort<T>::Merge_Sort_button_up() {
-  if ((N % 2) == 0) {
-    for (int sp = 1; sp < N; sp *= 2) {
-      for (int p_l = 0; p_l < (N - sp); p_l += (sp * 2)) {
-        merge(p_l, sp, p_l + sp, sp, sp * 2);
-      }
-    }
-  }
-  else {
-    for (int sp = 1; sp < (N - 1); sp *= 2) {
-      for (int p_l = 1; p_l < (N - sp); p_l += (sp * 2)) {
-        if (p_l == 1) {
-          merge(0, sp + 1, p_l + sp, sp, sp * 2);
-          continue;
-        }
-        merge(p_l, sp, p_l + sp, sp, sp * 2);
-      }
+  for (int sp = 1; sp < N; sp *= 2) {
+    for (int p_l = 0; p_l < (N - sp); p_l += (sp * 2)) {
+      merge(p_l, sp, p_l + sp, sp, sp * 2);
     }
   }
 }
