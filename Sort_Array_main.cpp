@@ -14,6 +14,10 @@ int main()
 {
   // initial
   int ini[16];
+  //int ini[13];
+  //int ini[9];
+  //int ini[7];
+  //int ini[3];
   std::cout << "\ninitial:" << std::endl;
   int n = sizeof(ini) / sizeof(ini[0]);// get array size
   std::for_each(ini, ini + n, [](int& var) { static int i = 0; var = 5 - i; i++; std::cout << " " << var; });

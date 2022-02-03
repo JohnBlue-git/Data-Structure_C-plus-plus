@@ -178,8 +178,26 @@ void Sort<T>::Merge_Sort_tradition() {
 //
 template<class T>
 void Sort<T>::Merge_Sort_button_up() {
-  for (int sp = 1; sp < N; sp *= 2) {
-    for (int p_l = 0; p_l < (N - sp); p_l += (sp * 2)) {
+  // 2 order
+  int n = 1;
+  while(n <= N) {
+    n *= 2;
+  }
+  // button up
+  for (int sp = 1; sp < n; sp *= 2) {
+    for (int p_l = 0; p_l < (n - sp * 2 + 1); p_l += (sp * 2)) {
+      // check the last round, then merge specifically
+      if ((p_l + sp * 2) > N) {
+        if (N % (sp * 2) <= sp) {
+          continue;
+        }
+        else {
+          int rs = N % sp;
+          merge(p_l, sp, p_l + sp, rs, sp + rs);
+          continue;
+        }
+      }
+      // normal sp * 2 = 2, 4, 8, 16, ...
       merge(p_l, sp, p_l + sp, sp, sp * 2);
     }
   }
