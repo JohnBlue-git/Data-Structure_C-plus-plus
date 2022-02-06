@@ -47,11 +47,13 @@ int main() {
   cout << endl;
 
   cout << "Sorting" << endl;
-  LinkedList<int> sort = test.sorting();
+  //LinkedList<int> sort = test.insertion_sort();
+  LinkedList<int> sort = test.merge_sort();//??? not right
   cout << "Print" << endl;
   sort.PrintList();
+  //test.PrintList();
   cout << "Size" << endl;
-  cout << test.length() << endl;
+  cout << sort.length() << endl;
   cout << endl;
 
   cout << "Clear" << endl;

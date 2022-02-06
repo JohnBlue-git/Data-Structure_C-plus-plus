@@ -70,6 +70,11 @@ public:
 
 template<class T>
 class LinkedList {
+private:
+  // merge function
+  ListNode<T>* halve(ListNode<T>* p_l, int SP) const;
+  ListNode<T>* merge(ListNode<T>* left, ListNode<T>* right) const;
+
 protected:
 	// size
 	int size;
@@ -102,7 +107,8 @@ public:
 	void Push_back(T x);// add entity
 	void Push_front(T x);// add entity
 	LinkedList transverse() const;// transverse
-	LinkedList sorting() const;// sort from small to big
+	LinkedList insertion_sort() const;// sort from small to big
+  LinkedList merge_sort() const;// break problem into smaller one and conquer
 
 	// exception class
 	class bad_empty : public std::logic_error
@@ -314,7 +320,7 @@ LinkedList<T> LinkedList<T>::transverse() const {
 }
 
 template<class T>
-LinkedList<T> LinkedList<T>::sorting() const {
+LinkedList<T> LinkedList<T>::insertion_sort() const {
 	// list for retrun
 	LinkedList<T> RT;
 	// sorting
@@ -356,4 +362,87 @@ LinkedList<T> LinkedList<T>::sorting() const {
 	}
 	// return
 	return RT;
+}
+
+template<class T>
+ListNode<T>* LinkedList<T>::halve(ListNode<T>* p_l, int SP) const {
+  if (SP == 1) {
+    ListNode<T>* rt = new ListNode<T>(p_l->data);
+    return rt;
+  }
+  else if (SP == 2) {
+    ListNode<T>* rt;
+    if (p_l->data > p_l->next->data) {
+      rt = new ListNode<T>(p_l->next->data);
+      rt->next = new ListNode<T>(p_l->data);
+    }
+    else {
+      rt = new ListNode<T>(p_l->data);
+      rt->next = new ListNode<T>(p_l->next->data);
+    }
+    return rt;
+  }
+  int spl = SP / 2; if ((SP % 2) != 0) { spl++; }
+  int spr = SP - spl;
+  ListNode<T>* p_r = p_l;
+  for (int i = 0; i < spl; i++) { p_r = p_r->next; }
+  ListNode<T>* left = halve(p_l, spl);
+  ListNode<T>* right = halve(p_r, spr);
+  return merge(left, right);
+}
+//
+template<class T>
+ListNode<T>* LinkedList<T>::merge(ListNode<T>* left, ListNode<T>* right) const {
+  // root
+  ListNode<T>* current;
+  if (left->data > right->data) {
+    current = right;
+    right = right->next;
+  }
+  else {
+    current = left;
+    left = left->next;
+  }
+  ListNode<T>* root = current;
+  // following
+  while (left != 0 || right != 0) {
+    if (left == 0) {
+      current->next = right;
+      right = right->next;
+    }
+    else if (right == 0) {
+      current->next = left;
+      left = left->next;
+    }
+    else {
+      if (left->data > right->data) {
+        current->next = right;
+        right = right->next;
+      }
+      else {
+        current->next = left;
+        left = left->next;
+      }
+    }
+    current = current->next;
+  }
+  // return
+  return root;
+}
+//
+template<class T>
+LinkedList<T> LinkedList<T>::merge_sort() const {
+  // list for retrun
+	LinkedList<T> RT;
+  // sorting
+  ListNode<T>* current = halve(first, size);
+  // copy
+  while (current != 0) {
+    RT.Push_back(current->data);
+    current = current->next;
+  }
+  // delete
+  delete current;
+  // return
+  return RT;
 }
