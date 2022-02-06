@@ -95,6 +95,7 @@ public:
 
 	// function
 	bool isEmpty() const;// check empty
+  ListNode<T>* root() const;// root of list
 	int length() const;// size of list
 	void PrintList() const;// print list
 	void Clear();// clear list
@@ -190,6 +191,11 @@ bool LinkedList<T>::isEmpty() const {
 	else {
 		return false;
 	}
+}
+
+template<class T>
+ListNode<T>* LinkedList<T>::root() const {
+  return first;
 }
 
 template<class T>
