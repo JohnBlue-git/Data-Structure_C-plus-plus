@@ -127,7 +127,9 @@ void Sort<T>::halve(int p_l, int SP) {
     return;
   }
   else if (SP == 2) {
-    exch(p_l, p_l + 1);
+    if (data[p_l] <= data[p_l + 1]) {
+      exch(p_l, p_l + 1);
+    }
     return;
   }
   int spl = SP / 2; if ((SP % 2) != 0) { spl++; }
