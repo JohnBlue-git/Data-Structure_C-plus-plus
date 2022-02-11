@@ -44,7 +44,7 @@ int main() {
   cout << endl;
 
   cout << "Sorting" << endl;
-  Queue_LinkedList<int> sort(test.sorting());
+  Queue_LinkedList<int> sort(test.insertion_sort());
   cout << "Print" << endl;
   sort.PrintList();
   cout << "Size" << endl;

@@ -60,15 +60,16 @@ T Queue_LinkedList<T>::Dequeue() {
 	if (this->first == 0) {                         // if list is empty
 		throw n_bad_empty("Pop()");
 	}
-	// pop
-	T rt;
-	ListNode<T>* current = this->first;
+	//
+	// pop (old version)
+	//ListNode<T>* current = this->first;
 	//rt = current->data; it is protected data from Node (not parent class)
-	rt = current->get_data();
-	this->first = current->get_next();
-	delete current;
+	//T rt = current->get_data();
+	//this->first = current->get_next();
+	//delete current;
 	// decrese size
-	this->size--;
+	//this->size--;
+	//
 	// return
-	return rt;
+	return this->Pop_front();
 }

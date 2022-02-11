@@ -106,7 +106,10 @@ public:
 	void Clear();// clear list
 	void Push_back(T x);// add entity
 	void Push_front(T x);// add entity
+  T Pop_front();// pop entity
+  // tran
 	LinkedList transverse() const;// transverse
+  // sort
 	LinkedList insertion_sort() const;// sort from small to big
   LinkedList merge_sort() const;// break problem into smaller one and conquer
 
@@ -302,6 +305,25 @@ void LinkedList<T>::Push_front(T x) {
 	}
 	// increase size number
 	size++;
+}
+
+template<class T>
+T LinkedList<T>::Pop_front() {
+  // check
+  if (this->first == 0) {                         // if list is empty
+    throw bad_empty("Pop_front()");
+  }
+  // pop
+  ListNode<T>* current = first;
+  //rt = current->data; it is protected data from Node (not parent class)
+  T rt = current->data;
+  first = current->next;
+  current->next = 0;
+  delete current;
+  // decrese size
+  size--;
+  // return
+  return rt;
 }
 
 template<class T>
