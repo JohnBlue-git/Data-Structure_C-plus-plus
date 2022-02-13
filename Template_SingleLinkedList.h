@@ -72,8 +72,8 @@ template<class T>
 class LinkedList {
 private:
   // merge function
-  ListNode<T>* halve(ListNode<T>* p_l, int SP) const;
-  ListNode<T>* merge(ListNode<T>* left, ListNode<T>* right) const;
+  ListNode<T>* halve(ListNode<T>* p_l, int SP, LinkedList& RT) const;
+  ListNode<T>* merge(ListNode<T>* left, ListNode<T>* right, LinkedList& RT) const;
 
 protected:
 	// size
@@ -387,7 +387,7 @@ LinkedList<T> LinkedList<T>::insertion_sort() const {
 }
 
 template<class T>
-ListNode<T>* LinkedList<T>::halve(ListNode<T>* p_l, int SP) const {
+ListNode<T>* LinkedList<T>::halve(ListNode<T>* p_l, int SP, LinkedList<T>& RT) const {
   if (SP == 1) {
     ListNode<T>* rt = new ListNode<T>(p_l->data);
     return rt;
@@ -408,13 +408,13 @@ ListNode<T>* LinkedList<T>::halve(ListNode<T>* p_l, int SP) const {
   int spr = SP - spl;
   ListNode<T>* p_r = p_l;
   for (int i = 0; i < spl; i++) { p_r = p_r->next; }
-  ListNode<T>* left = halve(p_l, spl);
-  ListNode<T>* right = halve(p_r, spr);
-  return merge(left, right);
+  ListNode<T>* left = halve(p_l, spl, RT);
+  ListNode<T>* right = halve(p_r, spr, RT);
+  return merge(left, right, RT);
 }
 //
 template<class T>
-ListNode<T>* LinkedList<T>::merge(ListNode<T>* left, ListNode<T>* right) const {
+ListNode<T>* LinkedList<T>::merge(ListNode<T>* left, ListNode<T>* right, LinkedList<T>& RT) const {
   // root
   ListNode<T>* current;
   if (left->data > right->data) {
@@ -448,6 +448,8 @@ ListNode<T>* LinkedList<T>::merge(ListNode<T>* left, ListNode<T>* right) const {
     }
     current = current->next;
   }
+  // end
+  RT.end = current;
   // return
   return root;
 }
@@ -457,14 +459,10 @@ LinkedList<T> LinkedList<T>::merge_sort() const {
   // list for retrun
 	LinkedList<T> RT;
   // sorting
-  RT.first = halve(first, size);
+  RT.first = halve(first, size, RT);
   // size end
   RT.size = size;
   ListNode<T>* current = RT.first;
-  while (current->next != 0) {
-    current = current->next;
-  }
-  RT.end = current;
   // return
   return RT;
 }
