@@ -457,14 +457,14 @@ LinkedList<T> LinkedList<T>::merge_sort() const {
   // list for retrun
 	LinkedList<T> RT;
   // sorting
-  ListNode<T>* current = halve(first, size);
-  // copy
-  while (current != 0) {
-    RT.Push_back(current->data);
+  RT.first = halve(first, size);
+  // size end
+  RT.size = size;
+  ListNode<T>* current = RT.first;
+  while (current->next != 0) {
     current = current->next;
   }
-  // delete
-  delete current;
+  RT.end = current;
   // return
   return RT;
 }
