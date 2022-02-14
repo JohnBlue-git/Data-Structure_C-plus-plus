@@ -139,8 +139,6 @@ LinkedList<T>::LinkedList(const LinkedList<T>& copy): first(0), end(0) {
 	ListNode<T>* current = copy.first;
 	while (current != 0) {
 		this->Push_back(current->data);
-		// increase size number
-		size++;
 		// iteration
 		current = current->next;
 	}
@@ -163,8 +161,6 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& copy) {
 	ListNode<T>* current = copy.first;
 	while (current != 0) {
 		this->Push_back(current->data);
-		// increase size number
-		size++;
 		// iteration
 		current = current->next;
 	}
