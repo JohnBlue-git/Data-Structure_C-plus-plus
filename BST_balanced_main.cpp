@@ -342,6 +342,11 @@ void BST::put(int ky, int dt) {
   B_Node** ad_p_p_current = 0;
   // find and add new node
   while(1) {
+    // initial
+    if (ad_p_current == 0) {
+      ad_p_current = &root;
+    }
+    // <
     if (ky < current->key) {
       if (current->left == 0) {
         // new Node
@@ -350,17 +355,13 @@ void BST::put(int ky, int dt) {
         break;
       }
       else {
-        if (ad_p_current != 0) {
-          ad_p_p_current = ad_p_current;
-        }
-        else {
-          ad_p_p_current = &root;
-        }
+        ad_p_p_current = ad_p_current;
         ad_p_current = &(current->left);
         p_current = current;
         current = current->left;
       }
     }
+    // >
     else if (ky > current->key) {
       if (current->right == 0) {
         current->right = new B_Node(ky, dt);
@@ -368,17 +369,13 @@ void BST::put(int ky, int dt) {
         break;
       }
       else {
-        if (ad_p_current != 0) {
-          ad_p_p_current = ad_p_current;
-        }
-        else {
-          ad_p_p_current = &root;
-        }
+        ad_p_p_current = ad_p_current;
         ad_p_current = &(current->right);
         p_current = current;
         current = current->right;
       }
     }
+    // ==
     else if (ky == current->key) {
       current->data = dt;
       return;
@@ -503,27 +500,21 @@ int BST::MaxK() {
 void BST::Del_loop(int ky, B_Node** ad_p_p_current, B_Node** ad_p_current, B_Node* p_current, B_Node* current) {
   //B_Node** ad_p_current; address of parent left or right pointer
   //
+  // initial
+  if (ad_p_current == 0) {
+    ad_p_current = &root;
+  }
   // deleting
   while (current != 0) {
     // search
     if (ky < current->key) {
-      if (ad_p_current != 0) {
-        ad_p_p_current = ad_p_current;
-      }
-      else {
-        ad_p_p_current = &root;
-      }
+      ad_p_p_current = ad_p_current;
       ad_p_current = &(current->left);
       p_current = current;
       current = current->left;
     }
     else if (ky > current->key) {
-      if (ad_p_current != 0) {
-        ad_p_p_current = ad_p_current;
-      }
-      else {
-        ad_p_p_current = &root;
-      }
+      ad_p_p_current = ad_p_current;
       ad_p_current = &(current->right);
       p_current = current;
       current = current->right;
