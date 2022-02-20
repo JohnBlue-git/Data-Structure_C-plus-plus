@@ -60,19 +60,27 @@ public:
 class HASH {
 private:
   // var
-  ListNode** table;
-  // but why not work @@ ListNode* table[10];
+  // method 1
+  //ListNode** table;
+  // method 2
+  ListNode* table[10];
+  // method 3 not work
+  //ListNode (*table)[10];
 
 public:
   // constructor
   HASH() {
-    table = new ListNode*[10];
-    for (int i = 0; i < 10; i++) {
+    // method 1
+    //table = new ListNode*[10];
+    // method 1 & 2
+    for (int i = 0; i < 10; i++) {// !!! must initialize
       table[i] = 0;
     }
   }
   HASH(const HASH& copy) {
-    table = new ListNode*[10];
+    // method 1
+    //table = new ListNode*[10];
+    // method 1 & 2
     for (int i = 0; i < 10; i++) {
       if (copy.table[i] != 0) {
         table[i] = new ListNode(*copy.table[i]);
@@ -83,7 +91,8 @@ public:
     }
   }
   ~HASH() {
-    delete[] table;
+    // method 1
+    //delete[] table;
   }
 
   // function
