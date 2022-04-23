@@ -58,7 +58,7 @@ private:
 public:
   // constructor
   //B_Node(): key(- 1), data(0), left(0), right(0) {}
-  B_Node(int k, int d): key(k), data(d), left(0), right(0), color(false) {}
+  B_Node(int k, int d): key(k), data(d), left(0), right(0), color(true) {}
   B_Node(const B_Node& copy);
   ~B_Node();
   // function
@@ -66,7 +66,7 @@ public:
   int get_data() const { return data; }
   B_Node* get_left() const { return left; }
   B_Node* get_right() const { return right; }
-  bool isRed() const { return color; }
+  //bool isRed() const { return color; }
   // friend
   friend BST;
 };
@@ -79,11 +79,20 @@ private:
   BST& operator=(const BST& copy);
   // function
   void print_loop(B_Node* current);// for print_v2
-  void Del_loop(int ky, B_Node** ad_p_p_current, B_Node** ad_p_current, B_Node* p_current, B_Node* current);
+  B_Node* Del_loop(int ky, B_Node* current, B_Node** parent);
   // function
   B_Node* RotateLeft(B_Node* h);
   B_Node* RotateRight(B_Node* h);
   void FlipColor(B_Node* h);
+  B_Node* put(B_Node* h, int ky, int dt);
+
+  //
+  bool isRed(B_Node* node) const {
+    if (node == 0) {
+      return false;
+    }
+    return node->color;
+  }
 
 public:
   // constructor
@@ -219,7 +228,7 @@ B_Node* BST::RotateRight(B_Node* h) {
 
 void BST::FlipColor(B_Node* h) {
   // check
-  if (h->isRed() || !h->left->isRed() || !h->right->isRed()) {
+  if (!isRed(h->left) || !isRed(h->right)) {
     return;
   }
   // flip
@@ -336,73 +345,43 @@ void BST::put(int ky, int dt) {
     return;
   }
   // insert
-  B_Node* current = root;
-  B_Node* p_current = 0;
-  B_Node** ad_p_current = &root;
-  B_Node** ad_p_p_current = 0;
-  // find and add new node
-  while(1) {
-    // <
-    if (ky < current->key) {
-      if (current->left == 0) {
-        // new Node
-        current->left = new B_Node(ky, dt);
-        current->left->color = true;
-        break;
-      }
-      else {
-        ad_p_p_current = ad_p_current;
-        ad_p_current = &(current->left);
-        p_current = current;
-        current = current->left;
-      }
-    }
-    // >
-    else if (ky > current->key) {
-      if (current->right == 0) {
-        current->right = new B_Node(ky, dt);
-        current->right->color = true;
-        break;
-      }
-      else {
-        ad_p_p_current = ad_p_current;
-        ad_p_current = &(current->right);
-        p_current = current;
-        current = current->right;
-      }
-    }
-    // ==
-    else if (ky == current->key) {
-      current->data = dt;
-      return;
-    }
-  }
-  // rotate or flip until it is a LLRB
-  if (current->isRed()) {// node link is red
-    if (current->right != 0) {// case (12)
-      // operation 2
-      current = RotateLeft(current);
-      *ad_p_current = current;
-    }
-    // !!! operation 1 is after operation 2 for case (12)
-    if (current->left != 0) {// case (11)
-      p_current = RotateRight(p_current);
-      FlipColor(p_current);
-      *ad_p_p_current = p_current;
-    }
-  }
-  else {// node link is black
-    if (current->left != 0 && current->right != 0) {// case (21)
-      // operation 3
-      FlipColor(current);
-    }
-    else if (current->left == 0) {// case (32)
-      // operation 4
-      current = RotateLeft(current);
-      *ad_p_current = current;
-    }
-  }
+  root = put(root, ky, dt);
 }
+// insert the key-value pair in the subtree rooted at h
+B_Node* BST::put(B_Node* h, int ky, int dt) {
+    if (h == 0) {
+      return new B_Node(ky, dt);
+    }
+
+    if (ky < h->key) {
+      h->left  = put(h->left,  ky, dt);
+    }
+    else if (ky > h->key) {
+      h->right = put(h->right, ky, dt);
+    }
+    else {
+      h->data = dt;
+    }
+
+    // fix-up any right-leaning links
+
+    if (!isRed(h->left) && isRed(h->right)) {// case (12) (32)
+      h = RotateLeft(h);
+    }
+    if (isRed(h->left)) {
+      if (isRed(h->left->left)) {// case (11) after return of case (12) (32)
+        h = RotateRight(h);
+      }
+    }
+    if (isRed(h->left) && isRed(h->right)) {// case (21)
+      FlipColor(h);
+    }
+    // case (31)
+
+    return h;
+}
+
+
 
 
 
@@ -493,92 +472,62 @@ int BST::MaxK() {
 // Left(black)     Right(black)
 //     ...    Left(not null)   ...
 //
-void BST::Del_loop(int ky, B_Node** ad_p_p_current, B_Node** ad_p_current, B_Node* p_current, B_Node* current) {
-  //B_Node** ad_p_current; address of parent left or right pointer
-  //
-  // initial
-  if (ad_p_current == 0) {
-    ad_p_current = &root;
+B_Node* BST::Del_loop(int ky, B_Node* current, B_Node** parent) {
+  if (current == 0) {
+    return 0;
   }
-  // deleting
-  while (current != 0) {
-    // search
-    if (ky < current->key) {
-      ad_p_p_current = ad_p_current;
-      ad_p_current = &(current->left);
-      p_current = current;
-      current = current->left;
-    }
-    else if (ky > current->key) {
-      ad_p_p_current = ad_p_current;
-      ad_p_current = &(current->right);
-      p_current = current;
-      current = current->right;
-    }
-    // delete
-    else if (ky == current->key) {
-      if (current->left == 0 && current->right == 0) {
-        // relink
-        *ad_p_current = 0;// !!! very important; cut the link
-        // delete
-        delete current;
-        // # after delete
-        // case (1) nothing
-        // case (21)
-        // case (22)
-        if (p_current->right != 0) {
-          // rotate parent
-          p_current = RotateLeft(p_current);
-          *ad_p_p_current = p_current;
-        }
-        if (p_current->left != 0 && !p_current->left->isRed()) {
-          p_current->left->color = true;
-          if (p_current->left->left != 0 && p_current->left->left->isRed()) {
-            p_current = RotateRight(p_current->left);
-            *ad_p_p_current = p_current;
-            FlipColor(p_current);
-          }
-        }
-      }
-      // #
-      // case (3)
-      else if (current->left != 0 && current->right == 0) {
-          ad_p_p_current = ad_p_current;
-          ad_p_current = &(current->left);
-          p_current = current;
-          current = current->left;
-          B_Node* cur = current;
-          while (cur->right) {
-            ad_p_p_current = ad_p_current;
-            ad_p_current = &(cur->right);
-            p_current = current;
-            cur = cur->right;
-          }
-          current->key = cur->key;
-          current->data = cur->data;
-          Del_loop(cur->key, ad_p_p_current, ad_p_current, p_current, cur);
-      }
-      else {
-          ad_p_p_current = ad_p_current;
-          ad_p_current = &(current->right);
-          p_current = current;
-          current = current->right;
-          B_Node* cur = current;
-          while (cur->left) {
-            ad_p_p_current = ad_p_current;
-            ad_p_current = &(cur->left);
-            p_current = current;
-            cur = cur->left;
-          }
-          current->key = cur->key;
-          current->data = cur->data;
-          Del_loop(cur->key, ad_p_p_current, ad_p_current, p_current, cur);
-      }
-      return;
+  else if (ky < current->key) {
+    current->left = Del_loop(ky, current->left, &(current->left));
+
+    if (current->left == 0 && current->right != 0) {
+      current = RotateLeft(current);
     }
   }
-  // not found
-  std::cout << "no such key\n";
+  else if (ky > current->key) {
+    current->right = Del_loop(ky, current->right, &(current->right));
+
+    if (current->left != 0 && current->right == 0) {
+      current->left->color = true;
+    }
+  }
+  // ky == current->key
+  else if (ky == current->key) {
+    if (current->left == 0 && current->right == 0) {
+      // relink
+      return 0;// !!! very important; cut the link
+    }
+    else if (current->left != 0 && current->right == 0) {
+        B_Node* cur = current->left;
+        parent = &(current->left);
+        while (cur->right) {
+          parent = &(cur->right);
+          cur = cur->right;
+        }
+        current->key = cur->key;
+        current->data = cur->data;
+        *parent = Del_loop(cur->key, cur, parent);
+    }
+    else {
+        B_Node* cur = current->right;
+        parent = &(current->right);
+        while (cur->left) {
+          parent = &(cur->left);
+          cur = cur->left;
+        }
+        current->key = cur->key;
+        current->data = cur->data;
+        *parent = Del_loop(cur->key, cur, parent);
+    }
+  }
+
+  if (current->left != 0 && isRed(current->left)) {
+    if (current->left->left != 0 && isRed(current->left->left)) {
+      *parent = RotateRight(current->left);
+      FlipColor(current);
+    }
+  }
+
+  return current;
 }
 
 void BST::Del(int ky) {
@@ -588,7 +537,7 @@ void BST::Del(int ky) {
     return;
   }
   // from root
-  Del_loop(ky, 0, 0, 0, root);
+  Del_loop(ky, root, 0);
 }
 
 int main()
